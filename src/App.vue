@@ -22,10 +22,10 @@
         </v-navigation-drawer>
         <v-app-bar app>
             <v-toolbar dark color="primary">
-                <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer"></v-app-bar-nav-icon>
                 <v-toolbar-title>Add application</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-toolbar-items>
+                <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn text
                            v-for="link of links"
                            :key="link.title"
