@@ -23,7 +23,9 @@
         <v-app-bar app>
             <v-toolbar dark color="primary">
                 <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer"></v-app-bar-nav-icon>
-                <v-toolbar-title>Add application</v-toolbar-title>
+                <v-toolbar-title>
+                    <router-link to="/" tag="span" class="pointer">Add application</router-link>
+                </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items class="hidden-sm-and-down">
                     <v-btn text
@@ -61,4 +63,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.pointer {
+    cursor: pointer;
+}
+</style>
