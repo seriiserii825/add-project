@@ -8,7 +8,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items>
           <v-btn text>
-            <v-icon>bug</v-icon>
+            <v-icon >mdi-account-heart</v-icon>
             Link one
           </v-btn>
         </v-toolbar-items>
