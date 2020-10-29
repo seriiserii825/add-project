@@ -19,7 +19,8 @@ const router = new VueRouter({
     {
       path: '/ad/:id',
       name: 'ad',
-      component: Add
+      component: Add,
+      props: true
     },
     {
       path: '/list',

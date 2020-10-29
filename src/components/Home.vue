@@ -45,7 +45,7 @@
 
                         <v-card-actions>
                             <v-btn color="green" dark>Buy</v-btn>
-                            <v-btn color="blue" dark>Open</v-btn>
+                            <v-btn color="blue" dark :to="'/ad/' + ad.id">Open</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>

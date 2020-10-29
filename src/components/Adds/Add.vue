@@ -3,12 +3,12 @@
         <v-layout row>
             <v-flex xs12>
                 <v-card>
-                   <v-img>
-                       <img src="@/assets/img/slider-3.jpg" width="100%" height="auto" alt="">
-                   </v-img>
+                    <v-img>
+                        <img :src="ad.imageSrc" width="100%" height="auto" alt="">
+                    </v-img>
                     <v-card-text>
-                        <h1 class="mb-8 font-weight-black black--text">Add 1</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci commodi consequatur cum deserunt dicta ducimus enim eos facilis ipsam, iure nobis nostrum perspiciatis quisquam quos sapiente tempore ullam ut voluptas.</p>
+                        <h1 class="mb-8 font-weight-black black--text">{{ ad.title }}</h1>
+                        <p>{{ ad.description }}</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn class="warning">Edit</v-btn>
@@ -22,9 +22,17 @@
 
 <script>
 export default {
+    props: ['id'],
     data() {
         return {}
     },
+    computed: {
+        ad() {
+            const id = this.id
+            console.log(this.id);
+            return this.$store.getters.adById(id)
+        }
+    }
 }
 </script>
 

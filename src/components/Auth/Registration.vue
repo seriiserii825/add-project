@@ -86,7 +86,7 @@ export default {
                     password: this.password,
                     confirmPassword: this.confirmPassword
                 }
-                console.log(user)
+                this.$store.dispatch('registerUser', user)
             }
         },
         reset() {
