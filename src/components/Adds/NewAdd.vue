@@ -30,13 +30,15 @@
                 <v-flex>
                     <v-layout row class="mb-4">
                         <v-flex>
-                            <v-btn class="warning">Upload image</v-btn>
+                            <v-btn @click="triggerUpload" class="warning">Upload image</v-btn>
                         </v-flex>
+                        <input type="file" @change="onFileChange" accept="image/*" style="display:none;"
+                               ref="inputFile">
                     </v-layout>
 
                     <v-layout row>
                         <v-flex>
-                            <!--              <img src="@/assets/img/slider-3.jpg" height="150">-->
+                            <img :src="imageSrc" height="150" v-if="imageSrc">
                         </v-flex>
                     </v-layout>
 
@@ -63,28 +65,45 @@ export default {
         return {
             title: '',
             description: '',
-            promo: false
+            promo: false,
+            image: null,
+            imageSrc: ''
         }
     },
     computed: {
-      loading(){
-          return this.$store.getters.loading
-      }
+        loading() {
+            return this.$store.getters.loading
+        }
     },
     methods: {
+        triggerUpload() {
+            this.$refs.inputFile.click()
+        },
+        onFileChange(event) {
+            const file = event.target.files[0]
+            // console.log(file)
+            const reader = new FileReader()
+            reader.onload = () => {
+                this.imageSrc = reader.result
+            }
+            reader.readAsDataURL(file)
+
+            this.image = file
+        },
         createAd() {
-            if (this.$refs.form.validate()) {
+            if (this.$refs.form.validate() && this.image) {
                 const ad = {
                     title: this.title,
                     description: this.description,
                     imageSrc: 'http://i.imgur.com/czsIYsv.png',
-                    promo: this.promo
+                    promo: this.promo,
+                    image: this.image
                 }
                 this.$store.dispatch('createAd', ad)
-                .then(() => {
-                    this.$router.push('/')
-                })
-                .catch(() => {})
+                    .then(() => {
+                        this.$router.push('/')
+                    })
+                    .catch(() => {})
             }
         }
     }
