@@ -93,9 +93,12 @@ export default {
           confirmPassword: this.confirmPassword
         }
         this.$store.dispatch('registerUser', user)
-        .then(() => {
-          this.$router.push('/')
-        })
+            .then(() => {
+              this.$router.push('/')
+            })
+            .catch((error) => {
+              this.$store.commit('setError', error.message())
+            })
       }
     },
     reset() {

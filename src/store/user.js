@@ -18,8 +18,8 @@ export default {
 		async registerUser({commit}, {email, password}) {
 			commit('clearError')
 			commit('setLoading', true)
-			const user = await firebase.auth().createUserWithEmailAndPassword(email, password)
 			try {
+				const user = await firebase.auth().createUserWithEmailAndPassword(email, password)
 				commit('setUser', new User(user.uid))
 				commit('setLoading', false)
 			} catch (error) {
@@ -31,14 +31,14 @@ export default {
 		async loginUser({commit}, {email, password}) {
 			commit('clearError')
 			commit('setLoading', true)
-			const user = await firebase.auth().signInWithEmailAndPassword(email, password)
 			try {
+				const user = await firebase.auth().signInWithEmailAndPassword(email, password)
 				commit('setUser', new User(user.uid))
 				commit('setLoading', false)
 			} catch (error) {
-				console.log(error);
+				console.log('error from loginUser ' + error);
 				commit('setLoading', false)
-				commit('setError', error.message)
+				commit('setError', error)
 				throw error
 			}
 		}
