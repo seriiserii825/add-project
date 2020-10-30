@@ -29,7 +29,6 @@ export default {
     computed: {
         ad() {
             const id = this.id
-            console.log(this.id);
             return this.$store.getters.adById(id)
         }
     }
