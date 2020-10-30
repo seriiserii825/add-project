@@ -25,5 +25,12 @@ export default {
 			commit('clearError')
 		},
 	},
-	getters: {}
+	getters: {
+		loading(state) {
+			return state.loading
+		},
+		error(state) {
+			return state.error
+		}
+	}
 }
