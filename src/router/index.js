@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import AuthGuard from './auth-guard'
 import Home from "@/components/Home";
 import Add from "@/components/Adds/Add";
 import AddList from "@/components/Adds/AddList";
@@ -25,12 +26,14 @@ const router = new VueRouter({
     {
       path: '/list',
       name: 'list',
-      component: AddList
+      component: AddList,
+      beforeEnter: AuthGuard
     },
     {
       path: '/new',
       name: 'newAd',
-      component: NewAdd
+      component: NewAdd,
+      beforeEnter: AuthGuard
     },
     {
       path: '/login',
@@ -45,7 +48,8 @@ const router = new VueRouter({
     {
       path: '/orders',
       name: 'orders',
-      component: Orders
+      component: Orders,
+      beforeEnter: AuthGuard
     },
   ],
   mode: 'history'
