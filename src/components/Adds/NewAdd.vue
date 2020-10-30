@@ -48,7 +48,7 @@
 
                     <v-layout row justify-end>
                         <v-flex class="d-inline-block" tag="span" shrink>
-                            <v-btn class="success" @click="createAd">Create Ad</v-btn>
+                            <v-btn class="success" @click="createAd" :loading="loading">Create Ad</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -66,6 +66,11 @@ export default {
             promo: false
         }
     },
+    computed: {
+      loading(){
+          return this.$store.getters.loading
+      }
+    },
     methods: {
         createAd() {
             if (this.$refs.form.validate()) {
@@ -76,6 +81,10 @@ export default {
                     promo: this.promo
                 }
                 this.$store.dispatch('createAd', ad)
+                .then(() => {
+                    this.$router.push('/')
+                })
+                .catch(() => {})
             }
         }
     }
