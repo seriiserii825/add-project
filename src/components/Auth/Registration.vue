@@ -109,8 +109,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-form {
-  //border: 2px solid #1976d2;
-  //box-shadow: 0 8px 28px rgba(0,0,0,.3);
-}
 </style>
