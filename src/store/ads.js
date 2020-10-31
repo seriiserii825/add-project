@@ -1,45 +1,27 @@
 import firebase from "firebase";
 
-class ad {
-  constructor(title, description, ownerId, imageSrc, promo = false) {
+class Ad {
+  constructor(title, description, ownerId, imageSrc, promo = false, id) {
     this.title = title
     this.description = description
     this.ownerId = ownerId
     this.imageSrc = imageSrc
     this.promo = promo
+    this.id = id
   }
 }
 
 export default {
   state: {
-    ads: [
-      {
-        title: 'First add',
-        description: 'Desc for First add',
-        promo: true,
-        imageSrc: require('@/assets/img/slider-1.jpg'),
-        id: '123'
-      },
-      {
-        title: 'Second add',
-        description: 'Desc for Second add',
-        promo: true,
-        imageSrc: require('@/assets/img/slider-2.jpg'),
-        id: '223'
-      },
-      {
-        title: 'Third add',
-        description: 'Desc for Third add',
-        promo: false,
-        imageSrc: require('@/assets/img/slider-3.jpg'),
-        id: '323'
-      }
-    ]
+    ads: []
   },
   mutations: {
     createAd(state, payload) {
       state.ads.push(payload)
-    }
+    },
+    loadAds(state, payload) {
+      state.ads = payload
+    },
   },
   actions: {
     async createAd({commit, getters}, payload) {
@@ -47,12 +29,13 @@ export default {
       commit('setLoading', true)
       const image = payload.image
       try {
-        const newAdd = new ad(
+        const newAdd = new Ad(
           payload.title,
           payload.description,
           getters.user.id,
           '',
-          payload.promo
+          payload.promo,
+          ''
         )
         const firebaseValue = await firebase.database().ref('ads').push(newAdd)
         const imageExtension = image.name.slice(image.name.lastIndexOf('.'))
@@ -72,7 +55,33 @@ export default {
         commit('setLoading', false)
         throw error
       }
-    }
+    },
+  
+    async fetchAds({commit}) {
+      commit('clearError')
+      commit('setLoading', true)
+    
+      const resultAds = []
+    
+      try {
+        const fbVal = await firebase.database().ref('ads').once('value')
+        const ads = fbVal.val()
+      
+        Object.keys(ads).forEach(key => {
+          const ad = ads[key]
+          resultAds.push(
+            new Ad(ad.title, ad.description, ad.ownerId, ad.imageSrc, ad.promo, key)
+          )
+        })
+      
+        commit('loadAds', resultAds)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setError', error.message)
+        commit('setLoading', false)
+        throw error
+      }
+    },
   },
   getters: {
     ads(state) {
