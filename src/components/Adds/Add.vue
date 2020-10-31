@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="pa-16">
         <v-layout row>
             <v-flex xs12>
                 <v-card>
@@ -11,11 +11,10 @@
                         <p>{{ ad.description }}</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn class="warning" @click="showModal">Edit</v-btn>
-                        <v-btn class="success">Buy</v-btn>
+                        <v-btn class="warning" @click="showModal" v-if="isOwnerAd">Edit</v-btn>
+                        <v-btn class="success" @click="showModalBuy">Buy</v-btn>
                     </v-card-actions>
-
-                    <v-dialog width="400px" v-model="modal">
+                    <v-dialog width="400px" v-model="modalEdit">
                         <v-card>
                             <v-container>
                                 <v-layout>
@@ -49,6 +48,8 @@
                 </v-card>
             </v-flex>
         </v-layout>
+
+        <buy-modal :ad="ad"></buy-modal>
     </v-container>
 </template>
 
@@ -57,7 +58,6 @@ export default {
     props: ['id'],
     data() {
         return {
-            modal: false,
             editedTitle: '',
             editedDescription: ''
         }
@@ -66,20 +66,29 @@ export default {
         ad() {
             const id = this.id
             return this.$store.getters.adById(id)
+        },
+        isOwnerAd() {
+            return this.ad.ownerId === this.$store.getters.user.id
+        },
+        modalEdit() {
+            return this.$store.getters.modalEdit
         }
     },
     methods: {
         showModal() {
-            this.modal = true
+            this.$store.commit('setModalEdit', true)
+        },
+        showModalBuy(){
+            this.$store.commit('setModalBuy', true)
         },
         onCancel() {
             this.editedTitle = this.ad.title
             this.editedDescription = this.ad.description
-            this.modal = false
+            this.$store.commit('setModalEdit', false)
         },
         onSave() {
             if (this.editedTitle !== '' && this.editedDescription !== '') {
-               this.modal = false
+                this.$store.commit('setModalEdit', false)
                 this.$store.dispatch('updateAd', {
                     id: this.ad.id,
                     title: this.editedTitle,

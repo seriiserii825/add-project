@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     markDone(order) {
-      console.log(order.done);
       if (order.done === false) {
         order.done = true
       }

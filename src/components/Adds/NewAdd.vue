@@ -81,7 +81,6 @@ export default {
         },
         onFileChange(event) {
             const file = event.target.files[0]
-            // console.log(file)
             const reader = new FileReader()
             reader.onload = () => {
                 this.imageSrc = reader.result

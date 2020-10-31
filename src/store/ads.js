@@ -22,6 +22,14 @@ export default {
     loadAds(state, payload) {
       state.ads = payload
     },
+    updateAd(state, {title, description, id}) {
+      const ad = state.ads.find(item => {
+        return item.id === id
+      })
+      
+      ad.title = title
+      ad.description = description
+    }
   },
   actions: {
     async createAd({commit, getters}, payload) {
@@ -56,24 +64,24 @@ export default {
         throw error
       }
     },
-  
+    
     async fetchAds({commit}) {
       commit('clearError')
       commit('setLoading', true)
-    
+      
       const resultAds = []
-    
+      
       try {
         const fbVal = await firebase.database().ref('ads').once('value')
         const ads = fbVal.val()
-      
+        
         Object.keys(ads).forEach(key => {
           const ad = ads[key]
           resultAds.push(
             new Ad(ad.title, ad.description, ad.ownerId, ad.imageSrc, ad.promo, key)
           )
         })
-      
+        
         commit('loadAds', resultAds)
         commit('setLoading', false)
       } catch (error) {
@@ -82,6 +90,29 @@ export default {
         throw error
       }
     },
+    
+    async updateAd({commit}, {title, description, id}) {
+      commit('clearError')
+      commit('setError', true)
+      
+      try {
+        await firebase.database().ref('ads').child(id).update({
+          title, description
+        })
+        
+        commit('updateAd', {title, description, id})
+        
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setError', error)
+        commit('setLoading', false)
+        console.log(error);
+        throw error
+      }
+    },
+    // createOrder({commit}, {title, description, adId, ownerId}) {
+    //
+    // }
   },
   getters: {
     ads(state) {
@@ -90,8 +121,10 @@ export default {
     promoAds(state) {
       return state.ads.filter(item => item.promo)
     },
-    myAds(state) {
-      return state.ads
+    myAds(state, getters) {
+      return state.ads.filter(item => {
+        return item.ownerId === getters.user.id
+      })
     },
     adById(state) {
       return addId => {

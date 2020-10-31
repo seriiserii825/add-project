@@ -20,11 +20,12 @@
         <v-container grid-list-lg>
             <v-layout row wrap>
                 <v-flex
-                    v-for="ad in ads"
+                    v-for="(ad, index) in ads"
                     :key="ad.id"
                     sm6
                     md4
                     class="mt-10"
+                    :index="index"
                 >
                     <v-card
                         class="mx-auto"
@@ -44,18 +45,31 @@
                         </v-card-subtitle>
 
                         <v-card-actions>
-                            <v-btn color="green" dark>Buy</v-btn>
+                            <v-btn color="green" dark @click="showModal(ad)">Buy</v-btn>
                             <v-btn color="blue" dark :to="'/ad/' + ad.id">Open</v-btn>
                         </v-card-actions>
+
                     </v-card>
                 </v-flex>
             </v-layout>
         </v-container>
+        <buy-modal :ad="clickedAd"></buy-modal>
     </div>
 </template>
 
 <script>
 export default {
+    data() {
+        return {
+            clickedAd: null
+        }
+    },
+    methods: {
+        showModal(item) {
+            this.clickedAd = item
+            this.$store.commit('setModalBuy', true)
+        }
+    },
     computed: {
         promoAds() {
             return this.$store.getters.promoAds
